@@ -2,6 +2,7 @@ import { Controller, Get, Post, UseGuards, Request, Body } from '@nestjs/common'
 import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiProperty } from '@nestjs/swagger';
+import { LocalAuthGuard } from './auth/local-auth.guard';
 
 class LoginDto{
   @ApiProperty()
@@ -20,7 +21,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req,  @Body() loginDto: LoginDto) {
     return req.user;
