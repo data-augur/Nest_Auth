@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiProperty } from '@nestjs/swagger';
 import { LocalAuthGuard } from './auth/local-auth.guard';
+import { AuthService } from './auth/auth.service';
 
 class LoginDto{
   @ApiProperty()
@@ -14,7 +15,7 @@ class LoginDto{
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService, private readonly authService:AuthService) {}
 
   @Get()
   getHello(): string {
@@ -24,6 +25,6 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req,  @Body() loginDto: LoginDto) {
-    return req.user;
+    return this.authService.login(req.user);
   }
 }
